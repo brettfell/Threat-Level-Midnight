@@ -156,22 +156,28 @@ function draw() {
             let y = row * TILE_SIZE;
 
             if (tile === 1) {
-                ctx.fillStyle = '#475569'; // Wall
-                ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+                // Draw Wall
+                if (imgWall.complete) ctx.drawImage(imgWall, x, y, TILE_SIZE, TILE_SIZE);
             } else if (tile === 0) {
-                ctx.fillStyle = '#1e293b'; // Floor
-                ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+                // Draw Floor
+                if (imgFloor.complete) ctx.drawImage(imgFloor, x, y, TILE_SIZE, TILE_SIZE);
             } else if (tile === 2) {
-                ctx.fillStyle = '#eab308'; // Goldenface
-                ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+                // Draw Goldenface
+                if (imgGoldenface.complete) ctx.drawImage(imgGoldenface, x, y, TILE_SIZE, TILE_SIZE);
             }
         }
     }
 
     // 3. Draw Scarn
-    ctx.fillStyle = player.color;
-    ctx.fillRect(player.x, player.y, player.size, player.size);
+    if (imgScarn.complete) {
+        ctx.drawImage(imgScarn, player.x, player.y, player.size, player.size);
+    } else {
+        // Fallback to blue square if the image hasn't loaded yet
+        ctx.fillStyle = player.color;
+        ctx.fillRect(player.x, player.y, player.size, player.size);
+    }
 }
+
 
 // --- THE GAME LOOP ---
 function gameLoop() {
