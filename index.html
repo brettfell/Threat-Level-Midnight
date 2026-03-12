@@ -8,48 +8,17 @@
 </head>
 <body>
 
-<div class="game-container">
-    
-    <div id="story-screen" class="screen active">
-        <div class="terminal-text">
-            <h2 id="story-title">President's Office</h2>
-            <p id="story-text">"Michael Scarn, we need you. Goldenface has taken the NHL All-Star Game hostage."</p>
-        </div>
-        <div id="story-choices" class="controls-grid">
-            <button class="action-btn" onclick="startBattle()">Accept Mission (Enter Battle)</button>
-        </div>
-    </div>
+<div class="game-wrapper">
+    <canvas id="gameCanvas" width="320" height="320"></canvas>
 
-    <div id="battle-screen" class="screen hidden">
-        <div class="battle-arena">
-            <div class="enemy-stat">
-                <h3>Goldenface</h3>
-                <div class="health-bar"><div id="enemy-hp" class="hp-fill" style="width: 100%;"></div></div>
-            </div>
-            <img id="enemy-img" src="goldenface.jpg" alt="Goldenface" class="enemy-sprite" onerror="this.style.display='none'">
-            <div class="player-stat">
-                <h3>Michael Scarn</h3>
-                <div class="health-bar"><div id="player-hp" class="hp-fill" style="width: 100%;"></div></div>
-            </div>
+    <div class="d-pad">
+        <button id="btn-up" class="d-btn">▲</button>
+        <div class="d-row">
+            <button id="btn-left" class="d-btn">◀</button>
+            <button id="btn-right" class="d-btn">▶</button>
         </div>
-        <div class="controls-grid">
-            <button class="action-btn attack" onclick="dummyWinBattle()">Shoot</button>
-            <button class="action-btn defend">Do The Scarn</button>
-        </div>
+        <button id="btn-down" class="d-btn">▼</button>
     </div>
-
-    <div id="bomb-screen" class="screen hidden">
-        <div class="bomb-casing">
-            <h1 id="timer" class="digital-clock">03:00</h1>
-            <p>Cut the correct wire to save the stadium!</p>
-            <div class="wire-box">
-                <button class="wire red" onclick="defuseBomb('red')"></button>
-                <button class="wire blue" onclick="defuseBomb('blue')"></button>
-                <button class="wire green" onclick="defuseBomb('green')"></button>
-            </div>
-        </div>
-    </div>
-
 </div>
 
 <script src="app.js"></script>
