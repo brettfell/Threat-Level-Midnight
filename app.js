@@ -2,6 +2,12 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
 const TILE_SIZE = 32;
+// --- LOAD ASSETS ---
+const imgWall = new Image(); imgWall.src = 'wall.png';
+const imgFloor = new Image(); imgFloor.src = 'floor.png';
+const imgGoldenface = new Image(); imgGoldenface.src = 'goldenface.png';
+const imgScarn = new Image(); imgScarn.src = 'scarn.png';
+
 
 // 0 = Floor, 1 = Wall, 2 = Goldenface
 const map = [
