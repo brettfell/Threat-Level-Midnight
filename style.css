@@ -1,0 +1,65 @@
+body {
+    background-color: #050a15; /* Midnight Blue */
+    color: #e0e0e0;
+    font-family: 'Courier New', Courier, monospace; /* Spy Terminal Vibe */
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    height: 100dvh;
+}
+
+.game-container {
+    width: 100%;
+    max-width: 500px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #0a1128;
+    box-shadow: 0 0 20px rgba(0,255,255,0.1);
+    position: relative;
+}
+
+/* Scene Manager Logic */
+.screen {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.hidden { display: none !important; }
+
+/* Buttons */
+.controls-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: auto;
+    padding-bottom: 20px;
+}
+.action-btn {
+    padding: 15px;
+    background-color: #1e293b;
+    color: #38bdf8;
+    border: 2px solid #38bdf8;
+    border-radius: 5px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+.action-btn:active { background-color: #38bdf8; color: #000; }
+.action-btn.attack { border-color: #ef4444; color: #ef4444; }
+
+/* Battle HUD */
+.health-bar { width: 100%; height: 15px; background: #333; border-radius: 5px; overflow: hidden; border: 1px solid #555; }
+.hp-fill { height: 100%; background: #22c55e; transition: width 0.3s; }
+.enemy-sprite { width: 150px; height: 150px; margin: 20px auto; display: block; border-radius: 10px; border: 2px solid #ef4444; }
+
+/* Bomb Defusal */
+.digital-clock { font-size: 4em; color: #ef4444; text-align: center; text-shadow: 0 0 10px #ef4444; margin: 20px 0; }
+.wire-box { display: flex; justify-content: space-around; margin-top: 40px; }
+.wire { width: 20px; height: 150px; border: none; cursor: pointer; border-radius: 10px; }
+.wire.red { background-color: #ef4444; }
+.wire.blue { background-color: #3b82f6; }
+.wire.green { background-color: #22c55e; }
