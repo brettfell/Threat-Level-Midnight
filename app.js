@@ -44,6 +44,7 @@ function setKey(key, isPressed) {
 // Mobile D-Pad support
 const bindBtn = (id, dir) => {
     const btn = document.getElementById(id);
+    if (!btn) return; // Safety check in case HTML is missing
     btn.addEventListener('touchstart', (e) => { e.preventDefault(); keys[dir] = true; });
     btn.addEventListener('touchend', (e) => { e.preventDefault(); keys[dir] = false; });
     btn.addEventListener('mousedown', () => keys[dir] = true);
@@ -56,15 +57,71 @@ bindBtn('btn-down', 'down');
 bindBtn('btn-left', 'left');
 bindBtn('btn-right', 'right');
 
+// --- DIALOGUE SYSTEM ---
+const dialogueBox = document.getElementById('dialogue-box');
+const dialogueText = document.getElementById('dialogue-text');
+let isPaused = false; // Stops Scarn from moving while talking
+
+// Click the text box to close it
+if (dialogueBox) {
+    dialogueBox.addEventListener('click', () => {
+        dialogueBox.classList.add('hidden');
+        isPaused = false; // Unfreeze the game!
+        
+        // Bounce the player back slightly so they don't get stuck in an infinite dialogue loop
+        player.y += 10; 
+    });
+}
+
+function triggerDialogue(text) {
+    if (isPaused) return; // Don't trigger if already talking
+    isPaused = true;
+    keys.up = keys.down = keys.left = keys.right = false; // Let go of all buttons
+    
+    if (dialogueText && dialogueBox) {
+        dialogueText.innerText = text;
+        dialogueBox.classList.remove('hidden');
+    }
+}
+
 // --- PHYSICS & COLLISION ---
-function isWall(x, y) {
-    // Convert pixel coordinates back into map grid coordinates
+function getTile(x, y) {
     let col = Math.floor(x / TILE_SIZE);
     let row = Math.floor(y / TILE_SIZE);
-    return map[row][col] === 1; // 1 means Wall
+    
+    // Safety check to prevent crashing if player walks off the absolute edge of the map array
+    if (row < 0 || row >= map.length || col < 0 || col >= map[0].length) {
+        return 1; // Treat out-of-bounds as a wall
+    }
+    return map[row][col];
+}
+
+function checkCollision(x, y) {
+    // Check all 4 corners of the player's square
+    const corners = [
+        getTile(x, y),
+        getTile(x + player.size - 1, y),
+        getTile(x, y + player.size - 1),
+        getTile(x + player.size - 1, y + player.size - 1)
+    ];
+
+    // Did we bump into Goldenface? (Tile 2)
+    if (corners.includes(2)) {
+        triggerDialogue("Scarn... I've been expecting you. The pucks are armed!");
+        return true; // Treat him like a solid wall so we can't walk through him
+    }
+
+    // Did we bump into a Wall? (Tile 1)
+    if (corners.includes(1)) {
+        return true; 
+    }
+
+    return false; // The path is clear!
 }
 
 function update() {
+    if (isPaused) return; // Freeze all math if a text box is open!
+
     let newX = player.x;
     let newY = player.y;
 
@@ -73,11 +130,8 @@ function update() {
     if (keys.left) newX -= player.speed;
     if (keys.right) newX += player.speed;
 
-    // Hitbox check: Only move if all 4 corners of the player are NOT touching a wall
-    if (!isWall(newX, newY) && 
-        !isWall(newX + player.size, newY) && 
-        !isWall(newX, newY + player.size) && 
-        !isWall(newX + player.size, newY + player.size)) {
+    // Only move if the new coordinates don't hit a wall or Goldenface
+    if (!checkCollision(newX, newY)) {
         player.x = newX;
         player.y = newY;
     }
@@ -96,13 +150,13 @@ function draw() {
             let y = row * TILE_SIZE;
 
             if (tile === 1) {
-                ctx.fillStyle = '#475569'; // Wall Color
+                ctx.fillStyle = '#475569'; // Wall
                 ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
             } else if (tile === 0) {
-                ctx.fillStyle = '#1e293b'; // Floor Color
+                ctx.fillStyle = '#1e293b'; // Floor
                 ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
             } else if (tile === 2) {
-                ctx.fillStyle = '#eab308'; // Goldenface Color
+                ctx.fillStyle = '#eab308'; // Goldenface
                 ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
             }
         }
